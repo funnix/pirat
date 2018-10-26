@@ -7,12 +7,13 @@ const http = require('http');
 const fs = require('fs');
 
 const express = require('express');
+const favicon = require('express-favicon');
 const socket = require('socket.io');
 var session = require("express-session");
 var MySQLStore = require('express-mysql-session')(session);
 var Sequelize = require("sequelize")
 var bodyParser = require("body-parser");
-const publicPath = path.join(__dirname, './public');
+const publicPath = path.join(__dirname, '..', './public');
 
 const port = process.env.PORT || 3000;
 //var app = express();
@@ -21,6 +22,10 @@ console.log(publicPath);
 
 QW = {};
 QW.Models = {};
+
+QW.Logging = {};
+require("./logger.js");
+
 global.forceDatabaseSync = false;
 
 
@@ -32,7 +37,8 @@ QW.App = {
 
         this.initDatabase(() => {
             this.createApp();
-
+            this.initAdditionalRoutes();
+            this.startApp();
         })
 
     },
@@ -50,9 +56,39 @@ QW.App = {
 
         this.io = socket(this.server);
 
-        this.app.use(express.static(publicPath));
+        this.app.use("/", express.static(publicPath));
+        this.app.use(favicon(publicPath + '/image/de.ico'))
+            // EJS einbinden
+        this.app.set("view engine", 'ejs');
+        this.app.set("views", __dirname + "/views")
 
-        console.log(this);
+        var sessionStore = new MySQLStore({
+            host: "localhost",
+            port: "3306",
+            createDatabaseTable: true,
+            database: QW.App.config.database.name,
+            user: QW.App.config.database.username,
+            password: QW.App.config.database.password
+        });
+
+        this.session = session({
+                secret: 'jadask35#äaslr23ö5äfläö235',
+                resave: true,
+                saveUninitialized: true,
+                cookie: {
+                    path: "/",
+                    httpOnly: true,
+                    // Ablaufdatum: 1 Tag
+                    maxAge: 1000 * 60 * 60 * 24,
+                    page: "PiratBook"
+                },
+                store: sessionStore
+
+            })
+            // Verwenden des Session-Objektes
+        this.app.use(this.session);
+        require(process.cwd() + "/core/middleware/express/Auth.js").init(this.app);
+        //console.log(this);
     },
     readConfigAndHelper: function() {
 
@@ -77,6 +113,31 @@ QW.App = {
         QW.DB = require(process.cwd() + "/core/DB.js").DB;
         QW.DB.init(callback);
 
+
+    },
+    initAdditionalRoutes: function() {
+        // Login/Logout
+
+        // Masin
+        require(process.cwd() + "/core/routes/Main").init(this.app);
+
+
+    },
+    startApp: function(callback) {
+
+        var that = this;
+
+        // HTTP-Server starten 
+        this.server = this.app.listen(this.config.port, function() {
+            QW.Logging.APP.info('PiratBook (HTTP) gestartet auf Port ' + that.config.port);
+            if (typeof callback == "function") callback();
+        });
+
+        // WebSockets initialisieren
+        // QW.WebSockets = require(process.cwd() + "/core/WebSockets.js").WebSockets;
+        // QW.WebSockets.init(this.server, this.session);
+        // // Feuern eines "Ich-bin-soweit"-Events
+        // QW.Emitter.emit('core:ready');
 
     },
 

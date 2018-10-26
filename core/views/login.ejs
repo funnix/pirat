@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title><% title %></title>
+	
+	  <!-- jquery -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <script src="bower_components/CanJS/can.jquery.js" type="text/javascript"></script>
+	  <script src="bower_components/CanJS/can.stache.js" type="text/javascript"></script>
+
+    <!-- Font Awesome -->
+    <link href="bower_components/font-awesome/css/fontawesome.min.css" rel="stylesheet">   
+
+    <!-- Semantic UI -->
+    <link rel="stylesheet" type="text/css" href="bower_components/semantic/dist/semantic.min.css">
+    <script src="bower_components/semantic/dist/semantic.min.js"></script>
+
+	
+	<!-- BASE -->
+	<script src="js/QW.Base.js" type="text/javascript"></script>
+	
+  </head>
+
+  <body style="background:white;">
+<div id="serverStatus"></div>
+
+
+    <div>
+
+      <div style="padding:100px;">
+        <div class="animate form login_form">
+		<div style="text-align:center;">
+			<img src="img/Fiducia-GAD.png" style="width:200px;margin:10px;"></img>
+	
+          </div>
+		  <section class="login_content" style="text-align:center;">
+		  		<img src="img/logo_ohne.png" style="width:350px"></img>
+          
+
+
+
+
+            <form class="ui form" style="margin:0px auto;padding:20px;border:1px solid #ccc; background:#eee;width:500px;">
+             
+			  
+			  <div id="error" style="background:#eee;color:red;display:none;border:2px solid red;padding:5px;margin-bottom:20px;border-radius:5px;" class="error"></div>
+			  
+              <div class="field">
+                <label>Username</label>
+                <input id="username" type="text" class="form-control" placeholder="Username" required=""/>
+              </div>
+              <div class="field">
+                <label>Passwort</label>
+                <input id="pwd" type="password" class="form-control" placeholder="Password" required="" />
+              </div>
+              <div>
+                <a class="ui button submit" id="login" onSubmit="return false;">Log in</a>
+              </div>
+              
+            </form>
+          </section>
+        </div>
+
+   
+      </div>
+    </div>
+
+
+
+	<script>
+
+	$(function(){
+
+    QW.Base.checkBrowser();
+    socket=new io();
+    
+ 
+
+    // Check the environment.....
+    $.ajax({url:"/environment",
+    success: function(data){
+
+       if(data == "PROD")return;
+
+       $(document).find("head title").html("RFTreff ("+data+")");
+       if(data == "ENTW"){        
+         $('section.login_content').prepend("<div style='font-size:1.5em;color:red;padding:20;'>ENTWICKLUNGS-SYSTEM !!</div>");
+       } else if(data == "INTE"){
+         $('section.login_content').prepend("<div style='font-size:1.5em;color:red;padding:20;'>INTE-SYSTEM !!</div>");
+       }
+    }
+    });
+
+		$('#username').focus();	
+		$('#pwd').on("keyup", function(e){
+			if(e.keyCode == 13)$('#login').click();
+		})
+
+		$('#login').on("click", function(){
+      
+			var username =  $('#username').val();
+			var pwd =  $('#pwd').val();
+			socket.emit ("user/login",{username:username,pwd:pwd},function(err,data){
+        if(err !=null){
+          console.log("ERRROR");
+          $('#error').html("Fehler: "+data).show();  
+        }else{
+          window.location.href = "index.html"+QW.Base.getGetParamsString();
+        }
+        
+        console.log("Rückgabe:",data)
+      });
+			// QW.Base.login(username, pwd, function(err, done){
+        
+			// 	if(err){
+			// 		$('#error').html("Fehler: "+err.msg).show();
+			// 	} else {
+			// 		window.location.href = "main"+QW.Base.getGetParamsString();
+			// 	}						
+			
+			// });
+		
+		});
+	
+	
+	});	
+	</script>
+	
+	
+  </body>
+</html>
