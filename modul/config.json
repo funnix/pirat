@@ -3,7 +3,7 @@
     "port": 3300,
     "database": {
         "name": "piratbook",
-        "password": " xxx",
+        "password": "",
         "username": "piratv7"
     }
 
