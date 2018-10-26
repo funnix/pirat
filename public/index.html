@@ -21,16 +21,7 @@
         <![endif]-->
 
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-        var socket = io();
-
-        socket.on('connect', () => {
-            console.log("Connect to Server");
-        })
-        socket.on('disconnect', () => {
-            console.log('Server is offline');
-        })
-    </script>
+    <script src="/js/index.js"></script>
 </body>
 
 </html>

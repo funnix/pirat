@@ -1,0 +1,10 @@
+{
+    "ver": 1.0,
+    "port": 3300,
+    "database": {
+        "name": "piratbook",
+        "password": "Sauron7.",
+        "username": "piratv7"
+    }
+
+}

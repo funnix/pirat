@@ -1,0 +1,3 @@
+/**   
+ * Foreign Keys for Sequelize
+ */
