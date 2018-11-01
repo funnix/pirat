@@ -133,11 +133,12 @@ QW.App = {
             if (typeof callback == "function") callback();
         });
 
-        // WebSockets initialisieren
-        // QW.WebSockets = require(process.cwd() + "/core/WebSockets.js").WebSockets;
-        // QW.WebSockets.init(this.server, this.session);
-        // // Feuern eines "Ich-bin-soweit"-Events
-        // QW.Emitter.emit('core:ready');
+        //WebSockets initialisieren
+        QW.WebSockets = require(process.cwd() + "/core/WebSockets.js").WebSockets;
+        QW.WebSockets.init(this.server, this.session);
+        // Feuern eines "Ich-bin-soweit"-Events
+
+        //QW.Emitter.emit('core:ready');
 
     },
 

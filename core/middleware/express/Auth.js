@@ -8,7 +8,7 @@ exports.init = function(app) {
 
     // Ohne gültige Session, sind nur die folgenden URLs erlaubt
     var publicUrls = ['/login', '/loginStatus', '/logout', '/environment', '/api/upload',
-        '/api/rawDataView', '/socket.io'
+        '/api/rawDataView', '/socket.io', '/bower_components'
     ];
 
     // Authentifizierungs-Middleware

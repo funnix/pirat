@@ -9,3 +9,8 @@ socket.on('disconnect', () => {
 socket.on('grid', (data) => {
 
 })
+socket.on('makeLogin', () => {
+    console.log("REDIRECT Login");
+    socket.emit("HUHU");
+    window.location.href = '/login';
+})
