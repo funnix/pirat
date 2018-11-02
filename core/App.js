@@ -55,7 +55,7 @@ QW.App = {
         this.server = http.createServer(this.app);
 
         this.io = socket(this.server);
-
+        console.log("IO:________________", this.io)
         this.app.use("/", express.static(publicPath));
         this.app.use(favicon(publicPath + '/image/de.ico'))
             // EJS einbinden
@@ -132,6 +132,7 @@ QW.App = {
             QW.Logging.APP.info('PiratBook (HTTP) gestartet auf Port ' + that.config.port);
             if (typeof callback == "function") callback();
         });
+
 
         //WebSockets initialisieren
         QW.WebSockets = require(process.cwd() + "/core/WebSockets.js").WebSockets;

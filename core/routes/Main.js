@@ -2,7 +2,7 @@ exports.init = function(app) {
 
     app.get("/", (req, res) => {
 
-        return res.end("Klappt");
+        return res.render("index", {});;
     })
 
     app.get("/main", (req, res) => {
@@ -11,6 +11,7 @@ exports.init = function(app) {
     });
 
     app.get("/login", (req, res) => {
+        console.log("WAS KOMMT HIER?");
         console.log("REQUEST:", req.session);
         return res.render('login', { title: "RFTreff" });
     })

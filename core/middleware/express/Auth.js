@@ -8,7 +8,7 @@ exports.init = function(app) {
 
     // Ohne gültige Session, sind nur die folgenden URLs erlaubt
     var publicUrls = ['/login', '/loginStatus', '/logout', '/environment', '/api/upload',
-        '/api/rawDataView', '/socket.io', '/bower_components'
+        '/api/rawDataView', '/socket.io', '/bower_components', '/views'
     ];
 
     // Authentifizierungs-Middleware
@@ -17,10 +17,10 @@ exports.init = function(app) {
         // Wenn kein Username vorhanden (also KEINE bestehende Session mit einem vorangegenagnen Login) 
         // und die angefragte Ressource ist KEINE öffentliche URL --> abbrechen
         // console.log("WAS PASSIERT HIER?", req)
-        // if (req.session.username == undefined && publicUrls.indexOf(req.path) == -1) {
-        //     res.status(403).send("Not logged in");
-        //     return;
-        // }
+        if (req.session.username == undefined && publicUrls.indexOf(req.path) == -1) {
+            res.status(403).send("Not logged in");
+            return;
+        }
 
         // Weiter gehts.
         // Es besteht eine Session: Alle weiteren Rechte-Prüfungen passieren an der

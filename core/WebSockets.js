@@ -36,6 +36,9 @@ var WebSockets = {
 
         // Der WebSocket-Server soll auf dem Server lauschen, auf dem auch der HTTP-Server sitzt
         this.io = io.listen(server);
+        // Auth über socket
+
+
         // Es werden WILDCARDS unterstützt (damit kann man auf alles hören, was vom Backend über 
         // einen WebSocket gesendet wird)
         this.io.use(socketioWildcard);
@@ -57,11 +60,17 @@ var WebSockets = {
         this.registerEndpoints();
 
         // Eine Verbindung vom Browser möchte sich verbinden
+
         this.io.on('connection', function(socket) {
 
 
-            console.log("Client Connected", socket.handshake.session);
-
+            console.log("Client Connected", socket.handshake.session, that.io.nsps);
+            // require('socketio-auth')(that.io, {
+            //     authenticate: this.authenticate,
+            //     postAuthenticate: this.postAuthenticate,
+            //     disconnect: this.disconnect,
+            //     timeout: 1000
+            // });
             if (!socket.handshake.session.username) {
                 socket.emit("makeLogin");
             }
@@ -109,7 +118,14 @@ var WebSockets = {
         });
 
     },
+    authenticate: (data) => {
+        var username = data.username;
+        var password = data.password;
+        console.log("Aus Authenticte:", username, password);
+    },
 
+    postAuthenticate: (err, callback) => {},
+    disconnect: (err, callback) => {},
     /**
      * Registriert alle fachlichen Funktionen des Backends
      * 
@@ -137,6 +153,7 @@ var WebSockets = {
         // // Aufrufen von Logs
         this.register("user", process.cwd() + "/core/logic/base/user/Login");
         this.register("main", process.cwd() + "/core/logic/base/user/Main");
+        this.register("authentication", process.cwd() + "/core/logic/base/user/Auth");
         console.log("##################################################################", this);
 
         this.register("user.State", process.cwd() + "/core/logic/base/user/State");
@@ -206,7 +223,7 @@ var WebSockets = {
      * @param {object} packetdata Daten des WebSocket-Calls
      * 
      */
-    dispatch: function(socket, packetdata) {
+    dispatch: function(socket, packetdata, callback) {
 
         // Die Aufrufe aus dem Frontend sollten IMMER der folgenden Struktur entsprechen
         // 1. Aufzurufende Route
@@ -221,14 +238,25 @@ var WebSockets = {
         var route = packetdata[0];
         var data = packetdata[1];
         var callback = packetdata[2];
-        console.log("=xxxx=================================================>", route);
+        console.log("=xxxx=================================================>", route, socket.handshake.session);
         if (route == "user/login") {
             socket.handshake.session.username = data.username;
+        }
+        if (route === "authentication") {
+            console.log("BEREITS ANGEMELDET?:", socket.auth);
+            if (socket.auth === true) {
+                return callback("Allready logged in");
+            }
+            console.log("AUTHENTICATIONS:", data)
+            console.log("Session ", socket.handshake.session);
+
+            socket.auth = true;
+
         }
         // Authentifizierung
         if (socket.handshake.session.username == undefined) {
             socket.handshake.session.reload(function(err) {});
-            return callback("NOT LOGGED IN");
+            //     return callback("NOT LOGGED IN");
         }
         if (typeof callback !== "function") {
             QW.Logging.WS.error("No callback function in socket call!")

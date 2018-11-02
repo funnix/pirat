@@ -23,45 +23,23 @@
 	    <script src="js/QW.Base.js" type="text/javascript"></script>
         <script src="js/modules/QW.Menu.js" type="text/javascript"></script>
         <script src="js/modules/QW.Tabs.js" type="text/javascript"></script>
-// socket.emit("connection");            
+        
     </head>
     <body>
     <script type="text/javascript">
     $(document).ready(function(){
-        socket = io.connect('http://192.168.10.120:3300');
-
-        QW.Base.init();
+        var socket = new io(); //.connect('http://192.168.10.120:3300');
+        socket.on('connect', () => {
+            console.log("Connect to Server");
+        })
+        //QW.Base.init();
   
-//     socket.on("err",function(data){
-//         console.log("ERROR:",data);
-//         console.log("SOCKET:",socket);
-//         var a = $("#footer").attr("class");
-//         a=a.split(" ");
-//         console.log("A:",a);
- 
-//         var b = [];
-//         for (var i in data.arr){
-//             b.push("bg"+data.arr[i]);
-//         }
-//         //$("#footer").removeClass("border-light");
-//         var oldClass=_.intersection(a,b);
-//         console.log("OLD:", oldClass);
-//         console.log("b:",b);     
-//         $('#'+data.footer).addClass("bg"+data.new);
-//         $('#'+data.footer).removeClass(oldClass);
-//         $("#"+data.footer).text(data.text);
-// //         for (var i in a){
-// // console.log("--->",a[i]);                
-// //         }
-
-//       //  $("#footer").toggleClass("border-light","border-success");
-//     })
-//     socket.on('status', function(data){
-//         console.log("STATUSMELDUNG:",data);
-//        $('serverStatus').text(data);
-     
-//     })
-//     console.log(socket);
+        socket.on('disconnect', () => {
+            console.log("DisConnect from  Server");
+        })
+        socket.on('status',(data)=>{
+            console.log("---",data);
+        })
 })
     </script>
         <% include ../partials/navigation %>
