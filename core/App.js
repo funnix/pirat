@@ -80,7 +80,12 @@ QW.App = {
                     httpOnly: true,
                     // Ablaufdatum: 1 Tag
                     maxAge: 1000 * 60 * 60 * 24,
-                    page: "PiratBook"
+                    page: "PiratBook",
+                    username: "",
+                    uid: "",
+                    admin: false,
+                    secret: "",
+                    rights: []
                 },
                 store: sessionStore
 

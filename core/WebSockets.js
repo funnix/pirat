@@ -118,14 +118,14 @@ var WebSockets = {
         });
 
     },
-    authenticate: (data) => {
-        var username = data.username;
-        var password = data.password;
-        console.log("Aus Authenticte:", username, password);
-    },
+    // authenticate: (data) => {
+    //     var username = data.username;
+    //     var password = data.password;
+    //     console.log("Aus Authenticte:", username, password);
+    // },
 
-    postAuthenticate: (err, callback) => {},
-    disconnect: (err, callback) => {},
+    // postAuthenticate: (err, callback) => {},
+    // disconnect: (err, callback) => {},
     /**
      * Registriert alle fachlichen Funktionen des Backends
      * 
@@ -152,11 +152,11 @@ var WebSockets = {
         // this.register("user.Filters", process.cwd() + "/core/logic/base/user/Filter");
         // // Aufrufen von Logs
         this.register("user", process.cwd() + "/core/logic/base/user/Login");
-        this.register("main", process.cwd() + "/core/logic/base/user/Main");
+        //this.register("main", process.cwd() + "/core/logic/base/user/Main");
         this.register("authentication", process.cwd() + "/core/logic/base/user/Auth");
         console.log("##################################################################", this);
 
-        this.register("user.State", process.cwd() + "/core/logic/base/user/State");
+        //this.register("user.State", process.cwd() + "/core/logic/base/user/State");
 
 
 

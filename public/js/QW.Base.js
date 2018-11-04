@@ -40,37 +40,37 @@ QW.Base = {
         // Deutsches "Locale" für die Moment-Library einstellen 
         moment.locale('de');
         // Setzen der Umgebung in den Browser-Titel
-        $.ajax({
-            url: "/environment",
-            success: function(data) {
-                // DATA ist ENTW, INTE oder PROD
-                if (data !== "PROD") $(document).find("head title").html("RFTreff (" + data + ")");
-            }
-        });
+        // $.ajax({
+        //     url: "/environment",
+        //     success: function(data) {
+        //         // DATA ist ENTW, INTE oder PROD
+        //         if (data !== "PROD") $(document).find("head title").html("RFTreff (" + data + ")");
+        //     }
+        // });
 
         // URL-Parameter des initialen Aufrufs
         this.urlParams = {};
 
         // Globaler AppState wird hier initialisiert
-        this.appState = new can.Map({
-            // Rechte des Users
-            rights: [],
-            // Verwendung von Arbeitsblättern (nur für einen Admin interessant und befüllt)
-            sheetUsage: {},
-            activeSheets: []
-        });
+        // this.appState = new can.Map({
+        //     // Rechte des Users
+        //     rights: [],
+        //     // Verwendung von Arbeitsblättern (nur für einen Admin interessant und befüllt)
+        //     sheetUsage: {},
+        //     activeSheets: []
+        // });
 
         // Globaler Fehler-Handler für Ajax-Errors
         //  this.initSocketEvents();
-        $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
-            // Global validation like this one:
-            if (jqxhr.status == 403) {
-                console.log(jqxhr.status);
-                console.log(jqxhr.responseJSON);
-                window.location.href = "login.html";
-                return;
-            }
-        });
+        // $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+        //     // Global validation like this one:
+        //     if (jqxhr.status == 403) {
+        //         console.log(jqxhr.status);
+        //         console.log(jqxhr.responseJSON);
+        //         window.location.href = "login.html";
+        //         return;
+        //     }
+        // });
 
         // Setzen ds globalen Debug-Modus (aus dem localeStorage)
         if (localStorage.getItem("debug") !== null) {
@@ -78,7 +78,7 @@ QW.Base = {
         }
 
         // Layout initalisieren
-        this.initLayout();
+        // this.initLayout();
         // Parsen der GET-Parameter der URL
         this.parseGetParams();
         // Login des Users prüfen
@@ -402,7 +402,17 @@ QW.Base = {
      * @param {function} callback Eine Callback-Funktion
      * 
      */
-    login: function(username, pwd, callback) {
+    login: function(username, password, callback) {
+        socket.emit('authentication/login', { username, password }, function(err, data) {
+            if (err.logedin !== true) {
+                console.log("ERRROR");
+                $('#error').html("Fehler: " + data).show();
+                callback(err);
+            } else {
+                callback();
+                // window.location.href = "/main"+QW.Base.getGetParamsString();
+            }
+        });
         // socket.emit("ANMELDUNG");
         // // Login-Methode des Backends aufrufen
         // $.ajax({
