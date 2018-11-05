@@ -9,10 +9,11 @@ exports.endpoints = {
 
     },
     getRights: async(socket, data, callback) => {
-        var uuid = socket.handshake.session.uuid;
+        var uuid = socket.handshake.session.uid;
         var User = await QW.Models.Users.findOne({ where: { id: uuid }, include: [{ model: QW.Models.Rights, as: 'rights' }] });
         // var rights = User.getRight();
         console.log(JSON.stringify(User, null, 4));
+        console.log("SESSION WATCH:", socket.handshake.session);
         //var right = await User.getRights();
         return callback(true, User.rights)
 

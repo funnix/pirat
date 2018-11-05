@@ -39,14 +39,7 @@ QW.Base = {
         this.initialLoad = true;
         // Deutsches "Locale" für die Moment-Library einstellen 
         moment.locale('de');
-        // Setzen der Umgebung in den Browser-Titel
-        // $.ajax({
-        //     url: "/environment",
-        //     success: function(data) {
-        //         // DATA ist ENTW, INTE oder PROD
-        //         if (data !== "PROD") $(document).find("head title").html("RFTreff (" + data + ")");
-        //     }
-        // });
+
 
         // URL-Parameter des initialen Aufrufs
         this.urlParams = {};
@@ -60,8 +53,9 @@ QW.Base = {
         //     activeSheets: []
         // });
 
+        this.initPage();
         // Globaler Fehler-Handler für Ajax-Errors
-        //  this.initSocketEvents();
+        this.initSocketEvents();
         // $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
         //     // Global validation like this one:
         //     if (jqxhr.status == 403) {

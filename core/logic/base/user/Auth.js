@@ -12,10 +12,10 @@ exports.endpoints = {
         } else {
             if (users.admin === true) {
 
-                socket.handshake.session.cookie.admin = true;
-                socket.handshake.session.cookie.logedin = true;
+                socket.handshake.session.admin = true;
+                socket.handshake.session.logedin = true;
                 socket.handshake.session.cookie.username = users.username;
-                socket.handshake.session.cookie.uid = users.id;
+                socket.handshake.session.uid = users.id;
                 socket.handshake.session.save();
                 return callback({ logedin: true }, { msg: `Admin ${users.username} with ${users.id} logged in ` });
             }
