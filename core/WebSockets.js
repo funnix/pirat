@@ -239,6 +239,10 @@ var WebSockets = {
         var data = packetdata[1];
         var callback = packetdata[2];
         console.log("=xxxx=================================================>", route, socket.handshake.session);
+        if (!socket.handshake.session.logedin) {
+            console.log("User ist noch nicht angemeldet!!");
+            socket.emit("user/loginFirst");
+        }
         if (route == "user/login") {
             socket.handshake.session.username = data.username;
         }

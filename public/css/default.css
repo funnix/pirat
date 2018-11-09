@@ -1,0 +1,253 @@
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100%;
+    display: none;
+    margin: 0;
+    padding: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px;
+}
+
+.tabContent {
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+}
+
+
+/* bootstrap fixes */
+
+.nav.side-menu>li {
+    border-right: 5px solid #2A3F54;
+}
+
+.nav.side-menu>li.active {
+    border-right: 5px solid #1ABB9C;
+}
+
+span.label-warning {
+    background: orange;
+    padding: 3px;
+    border-radius: 3px;
+}
+
+
+/* slickgrid fixes */
+
+.cell-flashing {
+    background: yellow;
+    /* !important */
+}
+
+.cell-title {
+    font-weight: bold;
+}
+
+.cell input.editor-text {
+    padding-left: 2px;
+}
+
+.slick-cell {
+    margin: 0;
+    padding: 0;
+}
+
+.slick-cell div.normalCell {
+    padding: 2px;
+}
+
+.slick-cell div.readonlyCell {
+    width: 100%;
+    height: 100%;
+}
+
+.slick-row:hover {
+    background: rgba(60, 141, 188, 0.1);
+    transition: background 0s;
+}
+
+.slick-row {
+    transition: background 0.2s;
+}
+
+div.slick-row.active {
+    background: rgba(60, 141, 188, 0.2);
+}
+
+div.slick-cell.active {
+    background: transparent;
+    /*rgba(60, 141, 188,0.2);*/
+}
+
+.cell-selection {
+    border-right-color: silver;
+    border-right-style: solid;
+    background: #f5f5f5;
+    color: gray;
+    text-align: left;
+    font-size: 10px;
+}
+
+.slick-row.selected .cell-selection {
+    background-color: transparent;
+    /* show default selected row background */
+    font-color: red;
+}
+
+.slick-header-column.ui-state-default {
+    line-height: 8px;
+}
+
+.slick-viewport {
+    border: 1px solid #ccc;
+    background: white;
+}
+
+
+/**
+ * Style the drop-down menu here since the plugin stylesheet mostly contains structural CSS.
+ */
+
+.slick-header-menu {
+    border: 1px solid #718BB7;
+    background: #f0f0f0;
+    padding: 2px;
+    -moz-box-shadow: 2px 2px 2px silver;
+    -webkit-box-shadow: 2px 2px 2px silver;
+    min-width: 100px;
+    z-index: 20;
+}
+
+.slick-header-menuitem {
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.slick-header-menuitem:hover {
+    border-color: silver;
+    background: white;
+}
+
+.slick-header-menuitem-disabled {
+    border-color: transparent !important;
+    background: inherit !important;
+}
+
+.icon-help {
+    background-image: url(../images/help.png);
+}
+
+
+/*
+div.slick-row.active {
+	background:#dddddd;
+}
+div.slick-cell.active {
+	background:#eee;
+}
+*/
+
+
+/** Select 2 addon "clear cross" */
+
+span.select2-selection__clear {
+    color: red;
+    font-size: 2em;
+}
+
+
+/** w2ui resizer layout **/
+
+.w2ui-layout>div .w2ui-panel .w2ui-panel-title {
+    padding: 5px;
+    background-image: -webkit-linear-gradient(#dae6f3, #212933);
+    background-image: -moz-linear-gradient(#dae6f3, #212933);
+    background-image: -ms-linear-gradient(#dae6f3, #212933);
+    background-image: -o-linear-gradient(#dae6f3, #212933);
+    background-image: linear-gradient(#2f3133, #212933);
+    filter: progid: dximagetransform.microsoft.gradient(startColorstr='#ffdae6f3', endColorstr='#ffc2d5ed', GradientType=0);
+    border: 1px solid #b9cee9;
+    border-bottom: 1px solid #99bbe8;
+}
+
+.w2ui-layout>div .w2ui-resizer {
+    background-color: #d7e4f2;
+}
+
+ul.sortable {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 60%;
+    margin: 10px;
+}
+
+ul.sortable li {
+    border: 1px solid gray;
+    margin: 4px;
+    padding: 3px;
+    border-radius: 3px;
+    background: white;
+}
+
+table th {
+    text-align: left;
+}
+
+
+/** ADMIN STUFF **/
+
+.adminMenuSeparator {
+    background: #ddd;
+    padding: 10px;
+    color: #333;
+    text-transform: uppercase;
+}
+
+.adminMenu {
+    font-weight: bold;
+    text-shadow: none;
+    color: #333;
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.adminMenu.active,
+.adminMenu.active:hover {
+    background: #333;
+    color: white;
+}
+
+.adminMenu:hover {
+    color: #333;
+    background: #ccc;
+    transition: background 0.3s;
+}
+
+td.sheetConfigTab {
+    padding: 5px;
+    cursor: pointer;
+    background: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+td.sheetConfigTab:hover {
+    background: #edf1f6;
+    transition: background 1s;
+}
+
+td.sheetConfigTab.active {
+    background: #edf1f6;
+}
