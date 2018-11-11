@@ -38,6 +38,7 @@
         var socket = new io(); //.connect('http://192.168.10.120:3300');
         socket.on('connect', () => {
             console.log("Connect to Server");
+            QW.Base.init();
         })
         //
   
@@ -55,20 +56,9 @@
                 console.log("loginStaus:", data);
                 return data;
             });
-        QW.Base.init();
+        
         // var pstyle = 'border: 1px solid #dfdfdf; padding: 5px;';
-    //     $('#layout').w2layout({
-    //         name: 'layout',
-    //         panels: [
-    //             { type: 'top', size: 50, resizable: true, style: pstyle, content: 'top' },
-    //             { type: 'left', size: 200, resizable: true, style: pstyle, content: 'left' },
-    //             { type: 'main', style: pstyle, content: 'main' },
-    //             { type: 'preview', size: '50%', resizable: true, hidden: true, style: pstyle, content: 'preview' },
-    //             { type: 'right', size: 200, resizable: true, hidden: true, style: pstyle, content: 'right' },
-    //             { type: 'bottom', size: 50, resizable: true, hidden: true, style: pstyle, content: 'bottom' }
-    //         ]
-    //     });
-    // });
+        })
     </script>
     <div id="myLayout" style="position:absolute;top:0;left:0;bottom:0;right:0;">>
     </div>

@@ -32,36 +32,30 @@ QW.Base = {
      * Initialisierung des Frontends
      *
      */
-    init: function() {
+    initt: function() {
 
         var that = this;
         // Initial bereits einmal geladen?
         this.initialLoad = true;
         // Deutsches "Locale" für die Moment-Library einstellen 
         moment.locale('de');
-        // Setzen der Umgebung in den Browser-Titel
-        // $.ajax({
-        //     url: "/environment",
-        //     success: function(data) {
-        //         // DATA ist ENTW, INTE oder PROD
-        //         if (data !== "PROD") $(document).find("head title").html("RFTreff (" + data + ")");
-        //     }
-        // });
+
 
         // URL-Parameter des initialen Aufrufs
         this.urlParams = {};
 
         // Globaler AppState wird hier initialisiert
-        this.appState = new can.Map({
-            // Rechte des Users
-            rights: [],
-            // Verwendung von Arbeitsblättern (nur für einen Admin interessant und befüllt)
-            sheetUsage: {},
-            activeSheets: []
-        });
+        // this.appState = new can.Map({
+        //     // Rechte des Users
+        //     rights: [],
+        //     // Verwendung von Arbeitsblättern (nur für einen Admin interessant und befüllt)
+        //     sheetUsage: {},
+        //     activeSheets: []
+        // });
 
+        this.initPage();
         // Globaler Fehler-Handler für Ajax-Errors
-        //  this.initSocketEvents();
+        this.initSocketEvents();
         // $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
         //     // Global validation like this one:
         //     if (jqxhr.status == 403) {
@@ -76,15 +70,14 @@ QW.Base = {
         if (localStorage.getItem("debug") !== null) {
             QW.Base.debug = (localStorage.getItem("debug") == "true") ? true : false;
         }
-        //
-        // Layout initalisieren
-        this.initLayout();
 
+        // Layout initalisieren
+        // this.initLayout();
         // Parsen der GET-Parameter der URL
-        //this.parseGetParams();
+        this.parseGetParams();
         // Login des Users prüfen
-        //  this.checkLogin();
-        this.initPage();
+        this.checkLogin();
+
 
         this.initSocketEvents();
     },
@@ -213,15 +206,15 @@ QW.Base = {
         QW.Modules.Tabs["welcome"].setContent(can.view("templates/welcome.html")(QW.Base.appState));
 
         // Potentielle Fehler des Banken-Import anzeigen!
-        // QW.Modules.Config.Cronjobs.getCockpitLog(function(err, data) {
-        //     try {
-        //         var data = JSON.parse(data.description);
-        //         if (data.missingIdInImport !== undefined && data.missingIdInImport.length > 0) {
-        //             var er = $("#errors");
-        //             er.html("<span style='color:red;' title='Folgende Inst-Nr. sind in BART (Bank-Serien) vorhanden, aber NICHT mehr im Cockpit-Import:\r\n" + data.missingIdInImport.join(", ") + "'><i class='fa fa-warning'></i> Cockpit-Import-Fehler</span>");
-        //         }
-        //     } catch (e) {}
-        // });
+        QW.Modules.Config.Cronjobs.getCockpitLog(function(err, data) {
+            try {
+                var data = JSON.parse(data.description);
+                if (data.missingIdInImport !== undefined && data.missingIdInImport.length > 0) {
+                    var er = $("#errors");
+                    er.html("<span style='color:red;' title='Folgende Inst-Nr. sind in BART (Bank-Serien) vorhanden, aber NICHT mehr im Cockpit-Import:\r\n" + data.missingIdInImport.join(", ") + "'><i class='fa fa-warning'></i> Cockpit-Import-Fehler</span>");
+                }
+            } catch (e) {}
+        });
 
         // Nun die Rechte holen....
         this.refreshSession();
@@ -267,15 +260,15 @@ QW.Base = {
         window.socket.on("connect", function(msg) {
             // Server-Status setzen
             that.serverStatus = "online";
-            $('#serverStatus').html(that.serverStatus).css('color', 'green');
-            // $('#serverStatus').removeClass("bg-light");
-            // $('#serverStatus').removeClass("bg-danger");
-            // $('#serverStatus').addClass("bg-success");
 
-            // $('#serverStatus').removeClass("border-light");
-            // $('#serverStatus').removeClass("border-danger");
-            // $('#serverStatus').addClass("border-success");
-            // $('#serverStatus').html("online");
+            $('#serverStatus').removeClass("bg-light");
+            $('#serverStatus').removeClass("bg-danger");
+            $('#serverStatus').addClass("bg-success");
+
+            $('#serverStatus').removeClass("border-light");
+            $('#serverStatus').removeClass("border-danger");
+            $('#serverStatus').addClass("border-success");
+            $('#serverStatus').html("online");
             // Bekannt geben, dass man verbunden ist.
             that.dispatch("connected");
         });
@@ -304,7 +297,6 @@ QW.Base = {
             //alert("DISCONNECT");			
             that.serverStatus = "offline";
             //
-            $('#serverStatus').html(that.serverStatus).css('color', 'red');
             // Ggf. initiiert durch den Browser! => dann nichts anzeigen....
             // if (msg == "transport close") return;
             // Server-Status (in rot) anzeigen
@@ -404,7 +396,17 @@ QW.Base = {
      * @param {function} callback Eine Callback-Funktion
      * 
      */
-    login: function(username, pwd, callback) {
+    login: function(username, password, callback) {
+        socket.emit('authentication/login', { username, password }, function(err, data) {
+            if (err.logedin !== true) {
+                console.log("ERRROR");
+                $('#error').html("Fehler: " + data).show();
+                callback(err);
+            } else {
+                callback();
+                // window.location.href = "/main"+QW.Base.getGetParamsString();
+            }
+        });
         // socket.emit("ANMELDUNG");
         // // Login-Methode des Backends aufrufen
         // $.ajax({
@@ -593,7 +595,7 @@ QW.Base = {
     initEasterEgg: function() {
 
         // Nicht alle User sehen das Easter Egg!!!
-        if (["carsten", "xgxttsg", "xgxtbrp", "xgxtsvb", "xgadjev", "xgadsge", "xgadcne", "xgadbbk", "xgadclj"].indexOf(QW.Base.user.username) == -1) return;
+        if (["xgadfas", "xgxttsg", "xgxtbrp", "xgxtsvb", "xgadjev", "xgadsge", "xgadcne", "xgadbbk", "xgadclj"].indexOf(QW.Base.user.username) == -1) return;
 
         var seconds = 30 * 60; // Nach 30 Minuten Inaktivität....
         window.easterEgg = function(action) {

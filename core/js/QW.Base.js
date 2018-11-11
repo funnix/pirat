@@ -40,13 +40,13 @@ QW.Base = {
         // Deutsches "Locale" für die Moment-Library einstellen 
         moment.locale('de');
         // Setzen der Umgebung in den Browser-Titel
-        $.ajax({
-            url: "/environment",
-            success: function(data) {
-                // DATA ist ENTW, INTE oder PROD
-                if (data !== "PROD") $(document).find("head title").html("RFTreff (" + data + ")");
-            }
-        });
+        // $.ajax({
+        //     url: "/environment",
+        //     success: function(data) {
+        //         // DATA ist ENTW, INTE oder PROD
+        //         if (data !== "PROD") $(document).find("head title").html("RFTreff (" + data + ")");
+        //     }
+        // });
 
         // URL-Parameter des initialen Aufrufs
         this.urlParams = {};
@@ -62,28 +62,29 @@ QW.Base = {
 
         // Globaler Fehler-Handler für Ajax-Errors
         //  this.initSocketEvents();
-        $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
-            // Global validation like this one:
-            if (jqxhr.status == 403) {
-                console.log(jqxhr.status);
-                console.log(jqxhr.responseJSON);
-                window.location.href = "login.html";
-                return;
-            }
-        });
+        // $(document).ajaxError(function(event, jqxhr, settings, thrownError) {
+        //     // Global validation like this one:
+        //     if (jqxhr.status == 403) {
+        //         console.log(jqxhr.status);
+        //         console.log(jqxhr.responseJSON);
+        //         window.location.href = "login.html";
+        //         return;
+        //     }
+        // });
 
         // Setzen ds globalen Debug-Modus (aus dem localeStorage)
         if (localStorage.getItem("debug") !== null) {
             QW.Base.debug = (localStorage.getItem("debug") == "true") ? true : false;
         }
-
+        //
         // Layout initalisieren
         this.initLayout();
-        // Parsen der GET-Parameter der URL
-        this.parseGetParams();
-        // Login des Users prüfen
-        this.checkLogin();
 
+        // Parsen der GET-Parameter der URL
+        //this.parseGetParams();
+        // Login des Users prüfen
+        //  this.checkLogin();
+        this.initPage();
 
         this.initSocketEvents();
     },
@@ -266,15 +267,15 @@ QW.Base = {
         window.socket.on("connect", function(msg) {
             // Server-Status setzen
             that.serverStatus = "online";
+            $('#serverStatus').html(that.serverStatus).css('color', 'green');
+            // $('#serverStatus').removeClass("bg-light");
+            // $('#serverStatus').removeClass("bg-danger");
+            // $('#serverStatus').addClass("bg-success");
 
-            $('#serverStatus').removeClass("bg-light");
-            $('#serverStatus').removeClass("bg-danger");
-            $('#serverStatus').addClass("bg-success");
-
-            $('#serverStatus').removeClass("border-light");
-            $('#serverStatus').removeClass("border-danger");
-            $('#serverStatus').addClass("border-success");
-            $('#serverStatus').html("online");
+            // $('#serverStatus').removeClass("border-light");
+            // $('#serverStatus').removeClass("border-danger");
+            // $('#serverStatus').addClass("border-success");
+            // $('#serverStatus').html("online");
             // Bekannt geben, dass man verbunden ist.
             that.dispatch("connected");
         });
@@ -303,6 +304,7 @@ QW.Base = {
             //alert("DISCONNECT");			
             that.serverStatus = "offline";
             //
+            $('#serverStatus').html(that.serverStatus).css('color', 'red');
             // Ggf. initiiert durch den Browser! => dann nichts anzeigen....
             // if (msg == "transport close") return;
             // Server-Status (in rot) anzeigen
